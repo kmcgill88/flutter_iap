@@ -92,6 +92,11 @@ public class FlutterIapPlugin implements MethodCallHandler {
         }
 
         @Override
+        public void onFailure(String cause) {
+          // TODO - IMPLEMENT
+        }
+
+        @Override
         public void onPurchasesUpdated(List<Purchase> purchases) {
           StringBuilder sb = new StringBuilder("[");
 
@@ -122,6 +127,11 @@ public class FlutterIapPlugin implements MethodCallHandler {
         @Override
         public void onConsumeFinished(String token, @BillingClient.BillingResponse int result) {
           Log.e("token", token);
+        }
+
+        @Override
+        public void onFailure(String cause) {
+          result.success("{\"status\": \""+ cause + "\"}");
         }
 
         @Override
@@ -165,7 +175,10 @@ public class FlutterIapPlugin implements MethodCallHandler {
         public void onBillingClientSetupFinished() {
           billingManager.querySKUProducts((List<String>) call.arguments);
         }
-
+        @Override
+        public void onFailure(String cause) {
+          // TODO - IMPLEMENT
+        }
         @Override
         public void onConsumeFinished(String token, int result) {
         }

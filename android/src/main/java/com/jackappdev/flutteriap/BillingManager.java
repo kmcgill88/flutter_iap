@@ -17,6 +17,7 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,6 +80,8 @@ public class BillingManager implements PurchasesUpdatedListener {
     void onConsumeFinished(String token, @BillingResponse int result);
 
     void onPurchasesUpdated(List<Purchase> purchases);
+
+    void onFailure(String cause);
   }
 
   /**
@@ -125,10 +128,25 @@ public class BillingManager implements PurchasesUpdatedListener {
       if (mBillingUpdatesListener != null) {
         mBillingUpdatesListener.onPurchasesUpdated(mPurchases);
       }
-    } else if (resultCode == BillingResponse.USER_CANCELED) {
-      Log.i(TAG, "onPurchasesUpdated() - user cancelled the purchase flow - skipping");
     } else {
       Log.w(TAG, "onPurchasesUpdated() got unknown resultCode: " + resultCode);
+      if (mBillingUpdatesListener != null) {
+        // https://developer.android.com/reference/com/android/billingclient/api/BillingClient.BillingResponse
+        HashMap<Integer, String> keys = new HashMap<>();
+        keys.put(BillingResponse.BILLING_UNAVAILABLE, "BILLING_UNAVAILABLE");
+        keys.put(BillingResponse.DEVELOPER_ERROR, "DEVELOPER_ERROR");
+        keys.put(BillingResponse.ERROR, "ERROR");
+        keys.put(BillingResponse.FEATURE_NOT_SUPPORTED, "FEATURE_NOT_SUPPORTED");
+        keys.put(BillingResponse.ITEM_ALREADY_OWNED, "ITEM_ALREADY_OWNED");
+        keys.put(BillingResponse.ITEM_NOT_OWNED, "ITEM_NOT_OWNED");
+        keys.put(BillingResponse.ITEM_UNAVAILABLE, "ITEM_UNAVAILABLE");
+        keys.put(BillingResponse.SERVICE_DISCONNECTED, "SERVICE_DISCONNECTED");
+        keys.put(BillingResponse.SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE");
+        keys.put(BillingResponse.USER_CANCELED, "USER_CANCELED");
+        keys.put(BillingResponse.OK, "OK");
+
+        mBillingUpdatesListener.onFailure(keys.get(resultCode));
+      }
     }
   }
 
