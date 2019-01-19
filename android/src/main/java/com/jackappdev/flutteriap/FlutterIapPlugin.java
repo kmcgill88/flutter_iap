@@ -128,6 +128,7 @@ public class FlutterIapPlugin implements MethodCallHandler {
         public void onPurchasesUpdated(List<Purchase> purchases) {
           Log.e("purchases", purchases.toString());
           if (purchases.size() > 0) {
+            /*
             for (Purchase p : purchases) {
               if (p.getSku().equalsIgnoreCase((String) call.arguments)) {
                 Log.e("Consuming", p.getSku());
@@ -135,6 +136,7 @@ public class FlutterIapPlugin implements MethodCallHandler {
                 break;
               }
             }
+            */
 
             // TODO: Dry the code (see above).
             StringBuilder sb = new StringBuilder("[");
