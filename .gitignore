@@ -14,3 +14,9 @@ build/
 
 
 example/test/
+
+example/ios/Flutter/flutter_export_environment.sh
+
+android/gradle/wrapper/gradle-wrapper.jar
+
+android/gradle/wrapper/gradle-wrapper.properties
